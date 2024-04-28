@@ -3,12 +3,8 @@ let res = [
     db.streaming_history.updateMany({}, [
         {
             $set: {
-                "ts": {
-                    $toDate: "$ts"
-                },
-                "seconds_played": { 
-                    $round: [{$divide: ["$ms_played", 1000]}, 2] 
-                }
+                "ts": { $toDate: "$ts" },
+                "seconds_played": { $round: [{$divide: ["$ms_played", 1000]}, 2] }
             }
         }
     ]),
@@ -16,7 +12,8 @@ let res = [
     db.playlists.updateMany({}, [
         {
             $set: {
-                "lastModifiedDate": {$toDate: "$lastModifiedDate"}
+                "lastModifiedDate": { $toDate: "$lastModifiedDate" },
+                "tracksCount": { $size: "$items" }
             }
         }
     ]),

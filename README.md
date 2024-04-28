@@ -74,3 +74,21 @@ Explore your Spotify streaming history & playlists data using [Metabase](https:/
 - unexpected-exit-while-paused
 - unknown
 - uriopen
+
+#### Playlists
+
+|         Field       |   Type   |  Description                              |
+|:-------------------:|:--------:|:------------------------------------------|
+| `name`              | String   | Playlist name.                            |
+| `lastModifiedDate`  | Datetime | Last modified date (note: no time given). |
+| `description`       | String   | Playlist description.                     |
+| `tracksCount`       | Integer  | Number of tracks for given playlist.      |
+| `numberOfFollowers` | Integer  | Number of followers for given playlist.   |
+| `items`             | Array    | Playlist tracks.                          |
+
+### Troubleshootings
+
+Mongo database is queryable by running :
+```bash
+$ docker exec -it spotify-database mongosh spotify --username admin --password password --authenticationDatabase admin
+```
