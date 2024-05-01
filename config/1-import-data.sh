@@ -3,3 +3,6 @@ ls -1 ./usr/dataset/Streaming_History_Audio_*.json | while read jsonfile; do \
 
 ls -1 ./usr/dataset/Playlist*.json | while read jsonfile; do \
     jq ".playlists" $jsonfile | mongoimport --db=spotify --collection=playlists --jsonArray; done
+
+ls -1 ./usr/dataset/YourLibrary.json | while read jsonfile; do \
+    jq ".tracks" $jsonfile | mongoimport --db=spotify --collection=tracks_library --jsonArray; done

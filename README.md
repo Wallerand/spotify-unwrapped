@@ -1,15 +1,18 @@
 # Spotify Unwrapped 👀
 
-Explore your Spotify streaming history & playlists data using [Metabase](https://www.metabase.com/).
+Explore your Spotify streaming history, playlists & tracks library using [Metabase](https://www.metabase.com/).
+
+Works locally without third-party or API, from GDPR request data. 
 
 <img src="assets/overview.png" alt="Sample question example" />
 
 ### Getting started
 
-1. Request your "Account data" and "Extended streaming history" Spotify data from account [privacy settings](https://www.spotify.com/account/privacy/)
+1. Request your Spotify "Account data" and "Extended streaming history" from account [privacy settings](https://www.spotify.com/account/privacy/)
 3. Place following JSON files to "dataset" folder :
     - Streaming_History_Audio_*.json
     - Playlist*.json
+    - YourLibrary.json
 4. Launch services via `docker-compose up -d`
 5. Open http://localhost:3000 and set up Metabase by creating an account and adding the following MongoDB database :
 
@@ -22,7 +25,7 @@ Explore your Spotify streaming history & playlists data using [Metabase](https:/
 |                 Field               |   Type   |  Description        |
 |:-----------------------------------:|:--------:|:--------------------|
 | `ts`                                | Datetime | This field is a timestamp indicating when the track stopped playing in UTC (Coordinated Universal Time). The order is year, month and day followed by a timestamp in military time |
-| `usernames`                         | String   | This field is your Spotify username. |
+| `username`                          | String   | This field is your Spotify username. |
 | `platform`                          | String   | This field is the platform used when streaming the track (e.g. Android OS, Google Chromecast). |
 | `ms_played`                         | Integer  | This field is the number of milliseconds the stream was played. |
 | `conn_country`                      | String   | This field is the country code of the country where the stream was played (e.g. SE - Sweden). |
@@ -86,9 +89,32 @@ Explore your Spotify streaming history & playlists data using [Metabase](https:/
 | `numberOfFollowers` | Integer  | Number of followers for given playlist.   |
 | `items`             | Array    | Playlist tracks.                          |
 
-### Troubleshootings
+### Miscellaneous
+
+#### Querying MongoDB
 
 Mongo database is queryable by running :
 ```bash
-$ docker exec -it spotify-database mongosh spotify --username admin --password password --authenticationDatabase admin
+$ docker exec -it spotify-database mongosh spotify \ 
+    --username admin --password password --authenticationDatabase admin
 ```
+
+#### Re-importing data
+
+Data can be re-imported by running :
+```bash
+$ docker stop spotify-database
+$ docker rm spotify-database
+$ docker volume rm spotify-db
+$ docker-compose up -d database
+```
+
+#### Duration conversion cheatsheet
+
+To convert milliseconds to human-readable unit :
+| Wanted unit   | Operation              |
+|---------------|------------------------|
+| ms to seconds | divide by `1 000`      |
+| ms to minutes | divide by `60 000`     |
+| ms to hours   | divide by `3 600 000`  |
+| ms to days    | divide by `86 400 000` |
